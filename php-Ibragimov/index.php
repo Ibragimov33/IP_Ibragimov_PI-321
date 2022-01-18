@@ -1,43 +1,50 @@
-<?
-require_once 'connect.php'; ?>
 <html>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сведения о прользователях сайта</title>
-</head>
-<h3>Ибрагимов Айдар</h3>
+<h1>Ибрагимов Айдар</h1>
+<head><title> Сведения о Студентах </title></head>
 <body>
+<h2>Сведения о Студентах:</h2>
 <table border="1">
+    <tr>
+        <th>ID</th>
+        <th>ФИО</th>
+        <th>Факультет</th>
+        <th>Группа</th>
+        <th>Номер зачетки</th>
+        <th>Телефон</th>
+        <th>Редактировать</th>
+        <th>Уничтожить</th>
+    </tr>
+    </tr>
+    <?php
+    require_once 'connect1.php';
+    $link = mysqli_connect($host, $user, $password, $database) or die ("Невозможно
+подключиться к серверу" . mysqli_error($link));
+    $result = mysqli_query($link, "SELECT id_students, fio_stud, fac_stud, group_stud, num_stud, tel_stud
+FROM students");
+    mysqli_select_db($link, "students");
 
-    <h2>Зарегистрированные пользователи:</h2>
-    <table border="1">
-        <tr>
-            <th> Имя </th> <th> E-mail </th>
-            <th> Редактировать </th> <th> Уничтожить </th> </tr>
-
-        <?php
-        $link = mysqli_connect($host, $user, $password, $database)
-        or die("Ошибка " . mysqli_error($link));
-
-        $result = mysqli_query($link, "SELECT id_user, user_name, user_e_mail FROM user");// запрос на выборку сведений о пользователях
-        mysqli_select_db($link, "users");
-
-        while ($row= mysqli_fetch_array($result)){// для каждой строки из запроса
-            echo "<tr>";
-            echo "<td>" . $row['user_name'] . "</td>";
-            echo "<td>" . $row['user_e_mail'] . "</td>";
-            echo "<td><a href='edit.php?id=" . $row['id_user'] . "'> Редактировать </a> </td>"; // запуск скрипта для редактирования
-            echo "<td><a href='delete.php?id=" . $row['id_user'] . "'> Удалить </a></td>"; // запуск скрипта для удаления записи
-            echo "</tr>";
-        }
-        print "</table>";
-        $num_rows = mysqli_num_rows($result); // число записей в таблице БД
-        print("<P> Всего пользователей: $num_rows </p>");
-        ?>
-        <p> <a href="new.php"> Добавить пользователя </a>
-        <li><a href="IbragimovBDstudent/index.php">Лабораторная работа № 4</a></li>
-     
-        <li><a href="IbragimovBDLab5/index.php">Лабораторная работа № 5</a></li>
+    while ($row = mysqli_fetch_array($result)) {
+        echo "<tr>";
+        echo "<td>" . $row['id_students'] . "</td>";
+        echo "<td>" . $row['fio_stud'] . "</td>";
+        echo "<td>" . $row['fac_stud'] . "</td>";
+        echo "<td>" . $row['group_stud'] . "</td>";
+        echo "<td>" . $row['num_stud'] . "</td>";
+        echo "<td>" . $row['tel_stud'] . "</td>";
+        echo "<td><a href='edit_students.php?id_students=" . $row['id_students']
+            . "'>Редактировать</a></td>"; // запуск скрипта для редактирования
+        echo "<td><a href='delete_students.php?id_students=" . $row['id_students']
+            . "'>Удалить</a></td>"; // запуск скрипта для удаления записи
+        echo "</tr>";
+    }
+    print "</table>";
+    $num_rows = mysqli_num_rows($result); // число записей в таблице БД
+    print("<P>Всего Студентов: $num_rows </p>");
+    ?>
+    <p><a href="new_students.php"> Добавить Студента</a>
+    <p><a href="vedomost.php">Зачетная ведомость</a>
+    <p><a href="subject.php">Предмет</a>
+    <p><a href="gen_pdf.php">Скачать pdf-файл</a>
+    <p><a href="gen_xls.php">Скачать xls-файл</a>
 </body>
 </html>
